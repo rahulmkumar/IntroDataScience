@@ -1,0 +1,100 @@
+select * from ETAK_TBL;
+
+SELECT datetime(Date) as "Date", Close from AA_TBL 
+where date between '2013-10-01' and '2013-11-01'
+order by 1 asc;
+
+
+SELECT strftime('%Y-%m-%d %H:%M:%S','2013-01-01 00:00:00') + strftime('%Y-%m-%d %H:%M:%S','2013-01-01 16:00:00'); 
+
+SELECT strftime('%Y-%m-%d %H:%M:%S',Date||'16:00:00') as "Date" from AA_TBL;
+
+select * from AMEX_SYM_TBl;
+
+select * from frequency where docid = '10398_txt_earn';
+
+select term from frequency where docid = '10398_txt_earn' and count = 1;
+
+select term from frequency where docid = '10398_txt_earn' and count = 1
+union
+select term from frequency where docid = '925_txt_trade' and count = 1;
+
+select * From frequency where term = 'parliament';
+
+select docid, sum(count)
+from frequency
+group by docid
+having sum(count) > 300;
+
+select X.docid from
+
+(select docid
+from frequency
+where term = 'transactions'
+) X
+
+where X.docid in (select distinct docid from frequency where term = 'world');
+
+Select X.docid from
+
+(select distinct docid, term from frequency
+where term = 'transactions') X, 
+
+(select distinct docid, term from frequency
+where term = 'world') Y
+
+where  X.docid = Y.docid
+
+select * from a;
+select * from b;
+
+'Multiplication';
+select a.row_num, b.col_num, sum(a.value*b.value)
+from a,b
+where a.col_num = b.row_num
+group by a.row_num, b.col_num;
+
+select a.docid, b.docid, sum(a.count*b.count)
+from frequency a,
+(select a.term as term, a.docid as docid, a.count
+from frequency a) b
+where a.term = b.term
+and a.docid = '10080_txt_crude'
+and b.docid = '17035_txt_earn'
+group by a.docid, b.docid;
+
+
+(select * from frequency
+union
+SELECT 'q' as docid, 'washington' as term, 1 as count 
+UNION
+SELECT 'q' as docid, 'taxes' as term, 1 as count
+UNION 
+SELECT 'q' as docid, 'treasury' as term, 1 as count)
+;
+
+select a.docid, b.docid, sum(a.count*b.count)
+from (select * from frequency
+union
+SELECT 'q' as docid, 'washington' as term, 1 as count 
+UNION
+SELECT 'q' as docid, 'taxes' as term, 1 as count
+UNION 
+SELECT 'q' as docid, 'treasury' as term, 1 as count)
+ a,
+(select a.term as term, a.docid as docid, a.count
+from (select * from frequency
+union
+SELECT 'q' as docid, 'washington' as term, 1 as count 
+UNION
+SELECT 'q' as docid, 'taxes' as term, 1 as count
+UNION 
+SELECT 'q' as docid, 'treasury' as term, 1 as count)
+ a) b
+where a.term = b.term
+and a.docid = 'q'
+group by a.docid, b.docid
+order by 3 desc
+
+
+select * from frequency;
